@@ -1,0 +1,904 @@
+/*
+ * Author       : revanth.pilli_protonmail
+ * Generated on : 11-Sep-2022 19:01:13
+ * Version      : 1.0
+ */
+ application "Order management"
+ {
+ 	date format = "dd-MMM-yyyy"
+ 	time zone = "Asia/Kolkata"
+ 	time format = "24-hr"
+	section Purchase_Order
+	{
+		displayname= "Purchase Order"
+		form New_Order
+		{
+			displayname = "New Order"
+			success message = "Data Added Successfully!"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			must have Order_Date
+			(
+    			type = date
+				displayname = "Order Date"
+				alloweddays = 0,1,2,3,4,5,6
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			unique Order_ID
+			(
+    			type = text
+				displayname = "Order ID"
+	 			row = 1
+	 			column = 2   
+				width = medium
+			)
+			must have Order_Details
+			(
+				type = grid
+				displayname = "Order Details"
+				defaultrow = 1
+				S_No
+				(
+					type = number
+					displayname = "Serial. No."
+					initial value = 1
+					width = medium
+				)
+				must have Product_Name
+				(
+    				type = text
+					displayname = "Product Name"
+					width = medium
+				)
+				must have Quantity
+				(
+					type = number
+					initial value = 1
+					width = medium
+				)
+				Retail_Price
+				(
+					type = decimal
+					displayname = "Retail Price"
+					initial value = 0.00
+					width = 200px
+				)
+				must have Unit_Price
+				(
+					type = decimal
+					displayname = "Unit Price"
+					initial value = 0.00
+					width = medium
+				)
+				must have Subtotal
+				(
+					type = decimal
+					width = medium
+				)
+	 			row = 2
+	 			column = 1   
+				width = 300px
+			)
+			Section1
+			(
+				type = section
+				displayname = "Section"
+	 			row = 3
+	 			column = 0   
+				width = medium
+			)
+			Total_Cost
+			(
+				type = decimal
+				displayname = "Total Cost"
+				initial value = 0.0
+	 			row = 3
+	 			column = 1   
+				width = 240px
+			)
+			Shipping_Details
+			(
+				type = section
+				displayname = "Shipping Details"
+				visibility = true
+	 			row = 4
+	 			column = 0   
+				width = medium
+			)
+			plain
+			(
+    			type = plaintext
+				value = "<font size=\"5\">Shipping Details</font>"
+	 			row = 4
+	 			column = 1   
+				width = medium
+			)
+			must have Name
+			(
+    			type = name
+     			prefix
+     			(
+	     			 type = prefix
+	     			 displayname ="Prefix"
+	     			 visibility = false
+	     			 value = {"Mr.","Mrs.","Ms."}
+     			) 
+     			first_name
+     			(
+	     			 type = first_name
+	     			 displayname ="First Name"
+     			) 
+     			last_name
+     			(
+	     			 type = last_name
+	     			 displayname ="Last Name"
+     			) 
+     			suffix
+     			(
+	     			 type = suffix
+	     			 displayname ="Suffix"
+	     			 visibility = false
+     			) 
+	 			row = 4
+	 			column = 1   
+				width = medium
+			)
+			must have Email
+			(
+    			type = email
+	 			row = 4
+	 			column = 1   
+				width = medium
+			)
+			must have Phone_Number
+			(
+    			type = phonenumber
+				displayname = "Phone Number"
+	 			row = 4
+	 			column = 1   
+				width = medium
+			)
+			Shipping_Address
+			(
+    			type = address
+				displayname = "Shipping Address"
+     			capture_coordinates = true
+     			adjust_using_map = false
+     			address_line_12
+     			(
+	     			  type = address_line_1
+	     			  displayname = "Address Line 1"
+     			) 
+     			address_line_22
+     			(
+	     			  type = address_line_2
+	     			  displayname = "Address Line 2"
+     			) 
+     			district_city2
+     			(
+	     			  type = district_city
+	     			  displayname = "City / District"
+     			) 
+     			state_province2
+     			(
+	     			  type = state_province
+	     			  displayname = "State / Province"
+     			) 
+     			postal_Code2
+     			(
+	     			  type = postal_Code
+	     			  displayname = "Postal Code"
+     			) 
+     			country2
+     			(
+	     			  type = country
+	     			  displayname = "Country"
+     			) 
+     			latitude2
+     			(
+	     			  type = latitude
+	     			  displayname = "latitude"
+	     			 visibility = false
+     			) 
+     			longitude2
+     			(
+	     			  type = longitude
+	     			  displayname = "longitude"
+	     			 visibility = false
+     			) 
+	 			row = 4
+	 			column = 1   
+				width = medium
+			)
+			must have Status
+			(
+				type = picklist
+				values = {"Pending","Ready for Delivery","Delivered"}
+				initial value = "Pending"
+	 			row = 4
+	 			column = 1   
+				width = medium
+			)
+	
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		kanban Order_Status
+		{
+			displayName = "Order Status"
+			show all rows from New_Order    
+			(
+				Name 
+	 			(
+	      			displayformat = [first_name+""+prefix+""+last_name+""+suffix]
+	 			)
+				Shipping_Address  as "Shipping Address"
+	 			(
+	      			displayformat = [address_line_12+""+address_line_22+""+district_city2+""+state_province2+""+postal_Code2+""+country2]
+	 			)
+				Status
+				Email
+				Order_Date as "Order Date"
+				Phone_Number as "Phone Number"
+				Total_Cost as "Total Cost"
+				Order_ID as "Order ID"
+			)
+			options
+			(
+	 			display field = Status
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = 2
+					datablock1
+					(
+			 			layout type = 4
+		     			title = "Overview"
+						fields
+						(
+							Order_ID as "Order ID"
+							Shipping_Address as "Shipping Address"
+							Name
+							Phone_Number as "Phone Number"
+							Total_Cost as "Total Cost"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    		 			Add 
+    		 			Print 
+    		 			Import 
+    		 			Export 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Print   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								Print   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 2
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Order_Date as "Order Date"
+							Order_ID as "Order ID"
+							Name
+							Email
+							Phone_Number as "Phone Number"
+							Shipping_Address as "Shipping Address"
+							Total_Cost as "Total Cost"
+						)
+					)
+					datablock2
+					(
+			 			layout type = -1
+		     			title = "Order Details"
+		     			related field = Order_Details
+						fields
+						(
+							S_No as "Serial No."
+							Product_Name as "Product Name"
+							Quantity
+							Retail_Price as "Retail Price"
+							Unit_Price as "Unit Price"
+							Subtotal
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Print 
+    		 			Delete 
+    		 			Duplicate 
+    	 			)
+    			)
+			)
+		}
+		list All_Orders
+		{
+			displayName = "All Orders"
+			show all rows from New_Order    
+			(
+				Name 
+	 			(
+	      			displayformat = [first_name+""+prefix+""+last_name+""+suffix]
+	 			)
+				Shipping_Address  as "Shipping Address"
+	 			(
+	      			displayformat = [address_line_12+""+address_line_22+""+district_city2+""+state_province2+""+postal_Code2+""+country2]
+	 			)
+				Order_Date as "Order Date"
+				Order_ID as "Order ID"
+				Status
+				Total_Cost as "Total Cost"
+				Phone_Number as "Phone Number"
+				Email
+			)
+			conditional formatting
+			(
+				"Pending Orders"
+				{
+				condition = (Status == "Pending")
+				fields = [Order_ID, Status]
+				format = "color:#b8841b;"
+				}
+				"Ready for Delivery"
+				{
+				condition = (Status == "Ready for Delivery")
+				fields = [Order_ID, Status]
+				format = "color:#9a47d1;"
+				}
+				"Delivered"
+				{
+				condition = (Status == "Delivered")
+				fields = [Order_ID, Status]
+				format = "color:#1ca885;"
+				}
+			)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Order_Date as "Order Date"
+							Order_ID as "Order ID"
+							Status
+							Name
+							Phone_Number as "Phone Number"
+							Shipping_Address as "Shipping Address"
+							Total_Cost as "Total Cost"
+							Email
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    		 			Add 
+    		 			Print 
+    		 			Import 
+    		 			Export 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Print   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								Print   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 2
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Order_Date as "Order Date"
+							Order_ID as "Order ID"
+							Status
+							Name
+							Phone_Number as "Phone Number"
+							Email
+							Total_Cost as "Total Cost"
+							Shipping_Address as "Shipping Address"
+						)
+					)
+					datablock2
+					(
+			 			layout type = -1
+		     			title = "Order Details"
+		     			related field = Order_Details
+						fields
+						(
+							S_No as "Serial. No."
+							Product_Name as "Product Name"
+							Quantity
+							Retail_Price as "Retail Price"
+							Unit_Price as "Unit Price"
+							Subtotal
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Print 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+
+
+
+
+		workflow
+		{
+		form
+		{
+			Run_Scripts_On_Always as "Run Scripts - On Always"
+			{
+				type =  form
+				form = New_Order
+				record event = on add or edit
+
+				field rules
+				{
+					actions 
+					{
+						disable Order_ID,Order_Date,Total_Cost;
+					}
+				}
+
+			}
+			Run_Scripts_On_Always1 as "Run Scripts - On Always"
+			{
+				type =  form
+				form = New_Order
+				record event = on add or edit
+
+				on load
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											disable Order_Details.Subtotal;
+										disable Order_Details.S_No;
+										input.Order_Date = zoho.currentdate;
+						)
+					}
+				}
+
+			}
+			Run_Scripts_On_Always2 as "Run Scripts - On Always"
+			{
+				type =  form
+				form = New_Order
+				record event = on add or edit
+
+				on user input of Order_Details.Unit_Price
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											// Checking unit price,quantity and calculating the subtotal and total cost
+										if(row.Unit_Price != null && row.Quantity != null)
+										{
+											if(row.Quantity <= 0)
+											{
+												row.Quantity=1;
+											}
+											row.Subtotal=row.Quantity * row.Unit_Price;
+											tempCost = 0.0;
+											for each  eachrow in Order_Details
+											{
+												eachRowTotal = ifnull(eachrow.Subtotal,0.0);
+												tempCost = eachRowTotal + tempCost;
+											}
+											input.Total_Cost = tempCost;
+										}
+										else
+										{
+											row.Subtotal=null;
+											if(row.Unit_Price == null)
+											{
+												alert "Please enter unit price";
+											}
+											else
+											{
+												alert "Please enter quantity";
+											}
+										}
+						)
+					}
+				}
+
+			}
+			Run_Scripts_On_Always3 as "Run Scripts - On Always"
+			{
+				type =  form
+				form = New_Order
+				record event = on add or edit
+
+				on user input of Order_Details.Quantity
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											// Checking Unit Price and Calculating subtotal and Total Cost
+										if(row.Unit_Price != null && row.Quantity != null)
+										{
+											if(row.Quantity <= 0)
+											{
+												row.Quantity=1;
+											}
+											row.Subtotal=row.Quantity * row.Unit_Price;
+											tempCost = 0;
+											for each  eachrow in Order_Details
+											{
+												eachRowTotal = ifnull(eachrow.Subtotal,0.0);
+												tempCost = eachRowTotal + tempCost;
+											}
+											input.Total_Cost = tempCost;
+										}
+										else
+										{
+											row.Subtotal=null;
+										}
+						)
+					}
+				}
+
+			}
+			Run_Scripts_On_Always4 as "Run Scripts - On Always"
+			{
+				type =  form
+				form = New_Order
+				record event = on add or edit
+
+				on add row of Order_Details
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											//  increasing the Sl.No
+										count_var = 0;
+										for each  item in Order_Details
+										{
+											count_var = count_var + 1;
+										}
+										row.S_No=count_var;
+						)
+					}
+				}
+
+			}
+			Run_Scripts_On_Always5 as "Run Scripts - On Always"
+			{
+				type =  form
+				form = New_Order
+				record event = on add or edit
+
+				on delete row of Order_Details
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											//  decreasing sl_no
+										for each  item in Order_Details
+										{
+											if(item.S_No > row.S_No)
+											{
+												item.S_No=item.S_No - 1;
+											}
+										}
+										// reducing the curent row cost from total cost
+										rowTotal = ifnull(row.Subtotal,0.0);
+										input.Total_Cost = input.Total_Cost - rowTotal;
+						)
+					}
+				}
+
+			}
+			Run_Scripts_While_Adding_ as "Run Scripts - While Adding a Record"
+			{
+				type =  form
+				form = New_Order
+				record event = on add
+
+				field rules
+				{
+					actions 
+					{
+						hide Order_ID;
+						disable Total_Cost;
+					}
+				}
+
+			}
+			Run_Scripts_While_Adding_1 as "Run Scripts - While Adding a Record"
+			{
+				type =  form
+				form = New_Order
+				record event = on add
+
+				on validate
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											// setting Unique Order ID for each order
+										lastOrder = (New_Order[ID != 0].Order_ID sort by Added_Time desc).getAll();
+										if(lastOrder.size() == 0)
+										{
+											input.Order_ID = "0001";
+										}
+										else
+										{
+											val = (lastOrder.get(0).toLong() + 1).toString();
+											str = leftpad(val,4).replaceAll(" ","0");
+											input.Order_ID = str;
+										}
+						)
+					}
+				}
+
+			}
+			Run_Scripts_While_Adding_2 as "Run Scripts - While Adding a Record"
+			{
+				type =  form
+				form = New_Order
+				record event = on add
+
+				on success
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											//  Constructing the Orders from Order_Details subform
+										msg = "<table cellpadding=\"5\"  style=\"border-collapse: collapse;width:96%;\"><tr style='background:#ddd;'><th>Sl.No</th><th>Product Name</th><th>Quantity</th><th>Retail Price</th><th>Unit Price</th><th>Sub Total</th></tr>";
+										for each  item in input.Order_Details
+										{
+											msg = msg + "<tr style='text-align:-webkit-center;'><td>" + item.S_No + "</td><td>" + item.Product_Name + "</td><td>" + item.Quantity + "</td><td>" + item.Unit_Price + "</td><td>" + item.Retail_Price + "</td><td>" + item.Subtotal + "</td></tr>";
+										}
+										msg = msg + "</table>";
+										//  Sending Mail Notification
+										sendmail
+										[
+											from :zoho.adminuserid
+											to :input.Email
+											subject :"Your " + zoho.appname + " Order ('" + input.Order_ID + "') is confirmed\n"
+											message :(("<p class=\"p1\" style=\"text-align: right;font-size:15px;\">Order Confirmation</p><p class=\"p1\" style=\"text-align: right;font-size:14px\"><b>order-id #" + input.Order_ID + "</b></p>\n<p class=\"p3\"><font size=\"3\">Hello&nbsp;" + input.Name) + ",</font></p><p class=\"p3\"><font size=\"3\"><br></font></p><blockquote style=\"border-top: 3px solid black; padding: 7px; background-color: rgb(245, 245, 245);\"><div><font size=\"3\">&nbsp;Order Details,</font></div><div><font size=\"3\"><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"0\" style=\"width: 100%; font-size: 10pt;\"><tbody><tr><td style='width:50%;'>Order Date -&nbsp;<p class=\"p1\" style='font-weight:bold;'>" + input.Order_Date + "</p></td><td style='width:50%;'><p class=\"p1\" style=\"text-align: right;font-size:13px\">Shipping Address</p><p class=\"p1\" style=\"text-align: right;\"></p><p class=\"p1\" style=\"text-align: right; white-space: pre;font-size:15px;font-weight:bolder;width: 50%;float: right;\"> " + input.Shipping_Address) + "</p></td></tr><tr><td><br></td><td><br></td></tr></tbody></table></div><div style='width:100%;'>" + msg + "</div><div style=\"width: 14%;    margin-left: 81%;    border: 1.0px solid;    text-align: -webkit-center;    padding: 10px;\">" + input.Total_Cost + "</div></font></div></blockquote><font size=\"3\"><br></font><p></p>"
+										]
+										success message "Your Order Has Been Confirmed. Note your Order ID : " + input.Order_ID + " for tracking your shipment";
+						)
+					}
+				}
+
+			}
+			Run_Scripts_While_Editing as "Run Scripts - While Editing a Record"
+			{
+				type =  form
+				form = New_Order
+				record event = on edit
+
+				field rules
+				{
+					actions 
+					{
+						disable Status;
+					}
+				}
+
+			}
+			Run_Scripts_While_Editing1 as "Run Scripts - While Editing a Record"
+			{
+				type =  form
+				form = New_Order
+				record event = on edit
+
+				on update of Status
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											if(input.Status == "Ready for Delivery")
+										{
+											sendmail
+											[
+												from :zoho.adminuserid
+												to :input.Email
+												subject :"Your " + zoho.appname + " Order ('" + input.Order_ID + "') is Out for Delivery\n"
+												message :("<div>Hi " + input.Name) + ", </div><div><br></div>your order : " + input.Order_ID + " is ready for delivery. You will recieve your order soon </div><div> regards,</div><div>" + zoho.adminuser + "</div>"
+											]
+										}
+										else if(input.Status == "Delivered")
+										{
+											sendmail
+											[
+												from :zoho.adminuserid
+												to :input.Email
+												subject :"Your " + zoho.appname + " Order ('" + input.Order_ID + "') is Delivered to you\n"
+												message :("<div>Hi " + input.Name) + ", </div><div><br></div>your order :" + input.Order_ID + " is delivered to the shipping address. Thanks for your order </div><div> regards,</div><div>" + zoho.adminuser + "</div>"
+											]
+										}
+						)
+					}
+				}
+
+			}
+		}
+
+
+
+
+
+	}
+	share_settings
+	{
+			"hackathon"
+			{
+				name = "hackathon"
+				type = Users_Permissions
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "hackathon Profile\n"
+				ModulePermissions
+				{
+					New_Order
+					{
+						enabled= Create 
+						allFieldsVisible= true 
+					}
+				}
+			}
+			"Hackathon"
+			{
+				name = "Hackathon"
+				type = Customer_Portal
+				permissions = {Chat:false, Predefined:false, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "Hackathon Profile\n"
+				ModulePermissions
+				{
+					New_Order
+					{
+						enabled= Create,Import,Export 
+						allFieldsVisible= true 
+					}
+				}
+			}
+			role Hierarchy = {New_Order}
+	}
+
+	customize
+	{
+		
+		layout = "tab"
+		color = "black"
+		base theme = "professional"
+		new theme = 1
+		
+		icons = true
+		icons style = outline
+	}
+
+
+	
+}
